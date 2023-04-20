@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener {
 
     JButton[] button = new JButton[11];
-    String[] expressions = {};
+    String[] expressions = {"plusButton", "minusButton", "multiplyButton", "divideButton", "equalButton",
+            "backwardButton", "clearButton"};
     JButton plusButton;
     JButton minusButton;
     JButton multiplyButton;
@@ -23,7 +25,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
     double value2;
     double answer;
     char expression;
-    boolean input1Complete;
+    boolean input1Complete = false;
 
     GUICalculatorTry1Upgrade3() {
 
@@ -129,6 +131,8 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         this.pack();
     }
 
+    //Logic
+
     public double calculate(double val1, char expr, double val2) {
         double tempAnswer = 0;
         if (expr == '+') tempAnswer = val1 + val2;
@@ -143,21 +147,22 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
     }
 
     public void expression() {
-
         if (input1Complete) {
+            //Check if input has any value
+            if (Objects.equals(input, "")) {
+                System.out.println("Input does not have any value");
+                return;
+            }
             value2 = Double.parseDouble(input.replace(',', '.'));
 
             answer = calculate(value1, expression, value2);
-
             inputDisplay = Double.toString(answer);
             updateDisplay();
-
             input = Double.toString(answer);
             value2 = 0;
             input1Complete = false;
         }
         else {
-
             value1 = Double.parseDouble(input.replace(',', '.'));
             updateDisplay();
             input = "";
@@ -215,10 +220,12 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             expression();
         }
         if (e.getSource() == equalButton) {
-            inputDisplay = inputDisplay.concat(equalButton.getText());
+            if (!input1Complete) {
+                System.out.println("You cannot place '=' here");
+                return;
+            }
             expression();
         }
-
 
     }
 }
