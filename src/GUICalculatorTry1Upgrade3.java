@@ -7,15 +7,8 @@ import java.util.Objects;
 public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener {
 
     JButton[] button = new JButton[11];
-    String[] expressions = {"plusButton", "minusButton", "multiplyButton", "divideButton", "equalButton",
-            "backwardButton", "clearButton"};
-    JButton plusButton;
-    JButton minusButton;
-    JButton multiplyButton;
-    JButton divideButton;
-    JButton equalButton;
-    JButton backwardButton;
-    JButton clearButton;
+    String[] expressions = {"+", "-", "*", "/", "=", "<-", "C"};
+    JButton[] expressionsButton = new JButton[7];
 
     JLabel displayLabel;
 
@@ -38,33 +31,11 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             button[i].addActionListener(this);
         }
 
-        plusButton = new JButton("+");
-        plusButton.setPreferredSize(new Dimension(100, 100));
-        plusButton.addActionListener(this);
-
-        minusButton = new JButton("-");
-        minusButton.setPreferredSize(new Dimension(100, 100));
-        minusButton.addActionListener(this);
-
-        multiplyButton = new JButton("*");
-        multiplyButton.setPreferredSize(new Dimension(100, 100));
-        multiplyButton.addActionListener(this);
-
-        divideButton = new JButton("/");
-        divideButton.setPreferredSize(new Dimension(100, 100));
-        divideButton.addActionListener(this);
-
-        equalButton = new JButton("=");
-        equalButton.setPreferredSize(new Dimension(100, 100));
-        equalButton.addActionListener(this);
-
-        backwardButton = new JButton("<-");
-        backwardButton.setPreferredSize(new Dimension(100, 100));
-        backwardButton.addActionListener(this);
-
-        clearButton = new JButton("C");
-        clearButton.setPreferredSize(new Dimension(100, 100));
-        clearButton.addActionListener(this);
+        for (int i = 0; i < 7; i++) {
+            expressionsButton[i] = new JButton(expressions[i]);
+            expressionsButton[i].setPreferredSize(new Dimension(100, 100));
+            expressionsButton[i].addActionListener(this);
+        }
 
         //JLabel
         displayLabel = new JLabel();
@@ -93,13 +64,10 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         expressionBodyPanel.setBackground(Color.ORANGE);
         expressionBodyPanel.setOpaque(true);
         expressionBodyPanel.setLayout(new GridLayout(4, 2, 8, 8));
-        expressionBodyPanel.add(plusButton);
-        expressionBodyPanel.add(equalButton);
-        expressionBodyPanel.add(minusButton);
-        expressionBodyPanel.add(backwardButton);
-        expressionBodyPanel.add(multiplyButton);
-        expressionBodyPanel.add(clearButton);
-        expressionBodyPanel.add(divideButton);
+
+        for (int i = 0; i < 7; i++) {
+            expressionBodyPanel.add(expressionsButton[i]);
+        }
 
         JPanel bodyDown = new JPanel();
         bodyDown.setPreferredSize(new Dimension(600,600));
@@ -163,20 +131,36 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             input1Complete = false;
         }
         else {
-            value1 = Double.parseDouble(input.replace(',', '.'));
+            value1 = Double.parseDouble(input.replaceAll(",+", "."));
             updateDisplay();
             input = "";
             input1Complete = true;
         }
     }
+    public void backwardButton() {
+        input = input.substring(0, (input.length() > 0)?input.length()-1:0);
+        inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
+        updateDisplay();
+    }
+    public void clearButton() {
+        input = "";
+        inputDisplay = "";
+        updateDisplay();
+        input1Complete = false;
+    }
+    public void equalButton() {
+        if (!input1Complete) {
+            System.out.println("You cannot place '=' here");
+            return;
+        }
+        expression();
+    }
 
     public static void main(String[] args) {
         new GUICalculatorTry1Upgrade3();
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-
         for (int i = 0; i < 11; i++) {
             if (e.getSource() == button[i]) {
                 input = input.concat(button[i].getText());
@@ -185,47 +169,17 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
                 break;
             }
         }
-
-        if (e.getSource() == backwardButton) {
-            input = input.substring(0, (input.length() > 0)?input.length()-1:0);
-            inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
-            updateDisplay();
-        }
-        if (e.getSource() == clearButton) {
-            input = "";
-            inputDisplay = "";
-            updateDisplay();
-            input1Complete = false;
-        }
-
-
-        if (e.getSource() == plusButton) {
-            inputDisplay = inputDisplay.concat(plusButton.getText());
-            expression = plusButton.getText().charAt(0);
-            expression();
-        }
-        if (e.getSource() == minusButton) {
-            inputDisplay = inputDisplay.concat(minusButton.getText());
-            expression = minusButton.getText().charAt(0);
-            expression();
-        }
-        if (e.getSource() == multiplyButton) {
-            inputDisplay = inputDisplay.concat(multiplyButton.getText());
-            expression = multiplyButton.getText().charAt(0);
-            expression();
-        }
-        if (e.getSource() == divideButton) {
-            inputDisplay = inputDisplay.concat(divideButton.getText());
-            expression = divideButton.getText().charAt(0);
-            expression();
-        }
-        if (e.getSource() == equalButton) {
-            if (!input1Complete) {
-                System.out.println("You cannot place '=' here");
-                return;
+        for (int i = 0; i < 7; i++) {
+            if (e.getSource() == expressionsButton[i]) {
+                if (expressionsButton[i].getText().equals("<-")) backwardButton();
+                else if (expressionsButton[i].getText().equals("C")) clearButton();
+                else if (expressionsButton[i].getText().equals("=")) equalButton();
+                else {
+                    inputDisplay = inputDisplay.concat(expressionsButton[i].getText());
+                    expression = expressionsButton[i].getText().charAt(0);
+                    expression();
+                }
             }
-            expression();
         }
-
     }
 }
