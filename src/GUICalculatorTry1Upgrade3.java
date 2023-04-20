@@ -30,7 +30,6 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             button[i].setPreferredSize(new Dimension(150, 150));
             button[i].addActionListener(this);
         }
-
         for (int i = 0; i < 7; i++) {
             expressionsButton[i] = new JButton(expressions[i]);
             expressionsButton[i].setPreferredSize(new Dimension(100, 100));
@@ -47,8 +46,8 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         displayLabel.setOpaque(true);
         displayLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        //JPanel
-
+        //JPanel (Design)
+            //calcBodyPanel
         JPanel calcBodyPanel = new JPanel();
         calcBodyPanel.setPreferredSize(new Dimension(400, 600));
         calcBodyPanel.setBackground(Color.GREEN);
@@ -58,35 +57,34 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             calcBodyPanel.add(button[i]);
         }
         calcBodyPanel.add(button[0]);
-
+            //expressionBodyPanel
         JPanel expressionBodyPanel = new JPanel();
         expressionBodyPanel.setPreferredSize(new Dimension(200, 600));
         expressionBodyPanel.setBackground(Color.ORANGE);
         expressionBodyPanel.setOpaque(true);
         expressionBodyPanel.setLayout(new GridLayout(4, 2, 8, 8));
-
         for (int i = 0; i < 7; i++) {
             expressionBodyPanel.add(expressionsButton[i]);
         }
-
+            //bodyDown
         JPanel bodyDown = new JPanel();
         bodyDown.setPreferredSize(new Dimension(600,600));
         bodyDown.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
         bodyDown.add(calcBodyPanel, BorderLayout.WEST);
         bodyDown.add(expressionBodyPanel, BorderLayout.EAST);
-
+            //bodyUp
         JPanel bodyUp = new JPanel();
         bodyUp.setPreferredSize(new Dimension(600, 100));
         bodyUp.setLayout(new BorderLayout());
         bodyUp.setBackground(Color.CYAN);
         bodyUp.add(displayLabel, BorderLayout.EAST);
-
+            //body
         JPanel body = new JPanel();
         body.setLayout(new BorderLayout());
         body.add(bodyUp, BorderLayout.NORTH);
         body.add(bodyDown, BorderLayout.SOUTH);
 
-        //JFrame
+        //JFrame (Window)
         this.setTitle("Calculator");
         this.setSize(600, 700);
         this.setVisible(true);
@@ -94,13 +92,11 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-        //Design
         this.add(body);
         this.pack();
     }
 
-    //Logic
-
+    //Methods
     public double calculate(double val1, char expr, double val2) {
         double tempAnswer = 0;
         if (expr == '+') tempAnswer = val1 + val2;
@@ -119,6 +115,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             //Check if input has any value
             if (Objects.equals(input, "")) {
                 System.out.println("Input does not have any value");
+                inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
                 return;
             }
             value2 = Double.parseDouble(input.replace(',', '.'));
@@ -131,6 +128,12 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
             input1Complete = false;
         }
         else {
+            //Check if input has any value
+            if (Objects.equals(input, "")) {
+                System.out.println("Input does not have any value");
+                inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
+                return;
+            }
             value1 = Double.parseDouble(input.replaceAll(",+", "."));
             updateDisplay();
             input = "";
@@ -156,6 +159,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         expression();
     }
 
+    //Initiate
     public static void main(String[] args) {
         new GUICalculatorTry1Upgrade3();
     }
