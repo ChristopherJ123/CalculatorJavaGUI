@@ -91,6 +91,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
+        this.setLocationRelativeTo(null);
 
         this.add(body);
         this.pack();
@@ -114,6 +115,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         if (input1Complete) {
             //Check if input has any value
             if (Objects.equals(input, "")) {
+                JOptionPane.showMessageDialog(null, "Input does not have any value", "Error!", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Input does not have any value");
                 inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
                 return;
@@ -130,6 +132,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
         else {
             //Check if input has any value
             if (Objects.equals(input, "")) {
+                JOptionPane.showMessageDialog(null, "Input does not have any value", "Error!", JOptionPane.ERROR_MESSAGE);
                 System.out.println("Input does not have any value");
                 inputDisplay = inputDisplay.substring(0, (inputDisplay.length() > 0)?inputDisplay.length()-1:0);
                 return;
@@ -153,6 +156,7 @@ public class GUICalculatorTry1Upgrade3 extends JFrame implements ActionListener 
     }
     public void equalButton() {
         if (!input1Complete) {
+            JOptionPane.showMessageDialog(null, "You cannot place '=' here", "Error!", JOptionPane.ERROR_MESSAGE);
             System.out.println("You cannot place '=' here");
             return;
         }
